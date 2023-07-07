@@ -1,0 +1,22 @@
+<% layout('template') %>
+
+<div class="row">
+    <div class="col-6 offset-3">
+        <form action="/gyms/new" method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" name="gym[name]" id="name" required>
+            </div>
+            <div class="mb-3">
+              <label for="location" class="form-label">Location</label>
+              <input type="text" class="form-control" name="gym[location]" id="location" aria-describedby="emailHelp" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label" for="description">Description</label>
+                <textarea name="gym[description]" class='form-control' id="description" cols="30" rows="10" required>Please say something about your gym!
+                </textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+    </div>
+</div>
