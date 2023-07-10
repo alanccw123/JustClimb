@@ -1,19 +1,54 @@
 <% layout('template') %>
-
-<div class="card" >
-    <img src="<%= gym.image %>" class="card-img-top"  alt="">
-    <div class="card-body">
-      <h5 class="card-title"><%= gym.name %></h5>
-      <p class="card-text"><%= gym.description %></p>
-    </div>
-    <ul class="list-group list-group-flush">
-      <li class="list-group-item"><%= gym.location %></li>
-      <li class="list-group-item">Price</li>
-    </ul>
-    <div class="card-body">
-      <a class="btn btn-primary" href="/gyms/<%= gym._id %>/edit">Edit</a>
-      <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
-        <button class="btn btn-primary">Delete</button>
+<div class="row">
+  <div class="col-6">
+    <div class="card" >
+      <img src="<%= gym.image %>" class="card-img-top"  alt="">
+      <div class="card-body">
+        <h5 class="card-title"><%= gym.name %></h5>
+        <p class="card-text"><%= gym.description %></p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><%= gym.location %></li>
+        <li class="list-group-item">Price</li>
+      </ul>
+      <div class="card-body">
+        <a class="btn btn-primary" href="/gyms/<%= gym._id %>/edit">Edit</a>
+        <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
+          <button class="btn btn-primary">Delete</button>
         </form>
+      </div>
     </div>
   </div>
+  
+  <div class="col-6">
+    <h5>How do climbers think about this place?</h3>
+    <div>
+      
+      <form class="d-inline" action="/gyms/<%= gym._id %>/reviews" method="post">
+        <textarea name="review[comment]" id="" cols="30" rows="2" required>Leave your comments here!</textarea>
+        <select name="review[rating]" id="">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+        <button class="btn btn-primary mb-3">submit</button>
+      </form>
+    </div>
+        <% for( review of gym.reviews) { %>
+          <div class="card">
+            <div class="card-body">
+              <p><%= review.rating %> stars  <%= review.comment %></p>
+              <p><%= review.createdAt %></p>
+              <form action="/gyms/<%=gym._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+                <button class="btn btn-sm btn-danger">Delete</button>
+            </form>
+            </div>        
+          </div>      
+        <% } %>
+  </div>
+</div>
+
+
+

@@ -9,6 +9,7 @@ const AppError = require('./AppError')
 
 mongoose.connect('mongodb://127.0.0.1:27017/JustClimb');
 const Gym = require('./models/gym');
+const Review = require('./models/review')
 
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-mate'))
@@ -23,6 +24,8 @@ app.get('/', (req, res) => {
     res.render('index');
 })
 
+
+// gym routes
 app.get('/gyms/new', async(req, res) => {
     res.render('gym/newgym');
 })
@@ -34,7 +37,7 @@ app.post('/gyms/new', async(req, res) => {
 })
 
 app.get('/gyms/:id', async (req, res) => {
-    const gym = await Gym.findById({_id: req.params.id});
+    const gym = await Gym.findById({_id: req.params.id}).populate('reviews');
     res.render('gym/gym', {gym});
 })
 
@@ -54,11 +57,31 @@ app.put('/gyms/:id/edit', async (req, res) => {
 })
 
 app.delete('/gyms/:id/delete', async (req, res) => {
-    await Gym.findByIdAndDelete(req.params.id);
-    console.log('deleted an object')
+    const gym = await Gym.findByIdAndDelete(req.params.id);
+    await Review.deleteMany({_id : {$in : gym.reviews}})
     res.redirect('/gyms')
 })
 
+// review routes
+app.post('/gyms/:id/reviews', async (req, res) => {
+    const review = new Review(req.body.review)
+    const gym = await Gym.findById(req.params.id)
+    gym.reviews.push(review)
+    await review.save()
+    await gym.save()
+    res.redirect(`/gyms/${req.params.id}`)
+})
+
+app.delete('/gyms/:id/reviews/:reviewid', async(req, res) => {
+    console.log("delete")
+    await Review.findByIdAndDelete(req.params.reviewid);
+    await Gym.findByIdAndUpdate(req.params.id, { $pull: { reviews: req.params.reviewid} });
+    res.redirect(`/gyms/${req.params.id}`);
+})
+
+
+
+// error handling
 app.all('*', (req, res) => {
     throw new AppError('Not found', 404)
 })
