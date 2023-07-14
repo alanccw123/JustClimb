@@ -6,11 +6,20 @@ const path = require('path');
 const mongoose = require('mongoose');
 const methodOverride = require('method-override');
 const morgan = require('morgan')
-const AppError = require('./AppError')
+const AppError = require('./utils/AppError')
 const gyms = require('./routes/gym')
 const reviews = require('./routes/review')
+const auth = require('./routes/auth')
 const session = require('express-session')
 const flash = require('connect-flash');
+const User = require('./models/user');
+const passport = require('passport');
+const LocalStrategy = require('passport-local');
+
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 
 // connect to db
 mongoose.connect('mongodb://127.0.0.1:27017/JustClimb').then(
@@ -32,15 +41,21 @@ app.use(methodOverride('_method'))
 app.use(morgan('tiny'))
 app.use(session({saveUninitialized: true, secret: 'cryptographysucks'}))
 app.use(flash())
+app.use(passport.initialize());
+app.use(passport.session());
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
+    res.locals.isLoggedin = req.isAuthenticated(); 
     next();
 })
 
+
 // routers
+app.use('/', auth);
 app.use('/gyms', gyms);
 app.use('/gyms/:id/reviews', reviews);
+
 
 app.get('/', (req, res) => {
     res.render('index');
