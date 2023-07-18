@@ -5,6 +5,8 @@ const gymSchema = new mongoose.Schema({
     description: String,
     location: String,
     image: String,
+    owner: { type: mongoose.Schema.Types.ObjectId,
+        ref: "user"},
     reviews: [{ type: mongoose.Schema.Types.ObjectId,
         ref: "review"}]
 });

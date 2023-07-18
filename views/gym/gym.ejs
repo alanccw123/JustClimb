@@ -1,7 +1,10 @@
 <% layout('template') %>
+<link rel="stylesheet" type="text/css" href="/stylesheets/starability-basic.min.css"/>
+
+
 <div class="row">
   <div class="col-6">
-    <div class="card" >
+    <div class="card mb-3" >
       <img src="<%= gym.image %>" class="card-img-top"  alt="">
       <div class="card-body">
         <h5 class="card-title"><%= gym.name %></h5>
@@ -11,12 +14,15 @@
         <li class="list-group-item"><%= gym.location %></li>
         <li class="list-group-item">Price</li>
       </ul>
-      <div class="card-body">
-        <a class="btn btn-primary" href="/gyms/<%= gym._id %>/edit">Edit</a>
-        <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
-          <button class="btn btn-primary">Delete</button>
-        </form>
-      </div>
+      <% if (isLoggedin && loggedinUser._id.equals(gym.owner)) { %>
+        <div class="card-body">
+          <a class="btn btn-primary" href="/gyms/<%= gym._id %>/edit">Edit</a>
+          <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
+            <button class="btn btn-primary">Delete</button>
+          </form>
+        </div>
+      <% } %>
+      
     </div>
   </div>
   
@@ -25,21 +31,31 @@
     <div>
       
       <form class="d-inline" action="/gyms/<%= gym._id %>/reviews" method="post">
+        <div class="">
+          <fieldset class="starability-basic">
+            <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+            <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+            <label for="first-rate1" title="Terrible">1 star</label>
+            <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+            <label for="first-rate2" title="Not good">2 stars</label>
+            <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+            <label for="first-rate3" title="Average">3 stars</label>
+            <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+            <label for="first-rate4" title="Very good">4 stars</label>
+            <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+            <label for="first-rate5" title="Amazing">5 stars</label>
+          </fieldset>
+        </div>
+        
         <textarea name="review[comment]" id="" cols="30" rows="2" required>Leave your comments here!</textarea>
-        <select name="review[rating]" id="">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-        </select>
         <button class="btn btn-primary mb-3">submit</button>
       </form>
     </div>
         <% for( review of gym.reviews) { %>
           <div class="card">
             <div class="card-body">
-              <p><%= review.rating %> stars  <%= review.comment %></p>
+              <p class="starability-result" data-rating="<%= review.rating %>">
+              <p><%= review.comment %></p>
               <p><%= review.createdAt %></p>
               <form action="/gyms/<%=gym._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
                 <button class="btn btn-sm btn-danger">Delete</button>

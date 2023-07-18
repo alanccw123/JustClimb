@@ -10,7 +10,7 @@ const populate = async() => {
         const random = Math.floor(Math.random() * gyms.length)
         const gym = new Gym({name: gyms[random].name, 
             location: gyms[random].city, description: gyms[random].description,
-        image: 'https://source.unsplash.com/random/900X700/?gym'});
+        image: 'https://source.unsplash.com/random/900X700/?gym', owner: '64b15ce9f69ef4e4ae2f4dd5'});
         await gym.save();    
     };
 }
