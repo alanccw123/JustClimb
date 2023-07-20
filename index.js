@@ -20,6 +20,8 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// for loading env in development, delete in production
+require('dotenv').config()
 
 // connect to db
 mongoose.connect('mongodb://127.0.0.1:27017/JustClimb').then(

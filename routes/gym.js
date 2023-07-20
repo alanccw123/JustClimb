@@ -4,46 +4,66 @@ const Gym = require('../models/gym');
 const Review = require('../models/review')
 const loginRequired = require('../utils/loginRequired');
 const isOwner = require('../utils/isOwner');
+const multer = require('multer')
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+
+// cloundinary config for hosting images
+cloudinary.config({
+  cloud_name: process.env.cloudinary_name,
+  api_key: process.env.cloundinary_api_key,
+  api_secret: process.env.cloundinary_api_secret,
+  secure: true
+});
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'JustClimb',
+  },
+});
+const upload = multer({ storage: storage });
 
 // gym routes
-router.get('/new', loginRequired, async(req, res) => {
-    res.render('gym/newgym');
+router.get('/new', loginRequired, async (req, res) => {
+  res.render('gym/newgym');
 })
 
-router.post('/new', loginRequired, async(req, res) => {
-    const gym = new Gym(req.body.gym);
-    await gym.save();
-    req.flash('success', 'Your gym has been added');
-    res.redirect('/gyms');
+router.post('/new', loginRequired, upload.array('images', 8), async (req, res) => {
+  const gym = new Gym(req.body.gym);
+  gym.images = req.files.map((file) => file.path)
+  gym.owner = req.user._id
+  await gym.save();
+  req.flash('success', 'Your gym has been added');
+  res.redirect('/gyms');
 })
 
 router.get('/:id', async (req, res) => {
-    const gym = await Gym.findById(req.params.id).populate('reviews');
-    console.log(res.locals.loggedinUser)
-    res.render('gym/gym', {gym});
+  const gym = await Gym.findById(req.params.id).populate('reviews');
+  res.render('gym/gym', { gym });
 })
 
 router.get('/', async (req, res) => {
-    const gyms = await Gym.find({});
-    res.render('gym/gyms', {gyms});
-}) 
+  const gyms = await Gym.find({});
+  res.render('gym/gyms', { gyms });
+})
 
 router.get('/:id/edit', loginRequired, isOwner, async (req, res) => {
-    const gym = await Gym.findById(req.params.id);
-    res.render('gym/edit', {gym});
+  const gym = await Gym.findById(req.params.id);
+  res.render('gym/edit', { gym });
 })
 
 router.put('/:id/edit', loginRequired, isOwner, async (req, res) => {
-    const gym = await Gym.updateOne({_id: req.params.id}, req.body.gym);
-    req.flash('success', 'Changed saved');
-    res.redirect(`/gyms/${req.params.id}`)
+  const gym = await Gym.updateOne({ _id: req.params.id }, req.body.gym);
+  req.flash('success', 'Changed saved');
+  res.redirect(`/gyms/${req.params.id}`)
 })
 
 router.delete('/:id/delete', loginRequired, isOwner, async (req, res) => {
-    const gym = await Gym.findByIdAndDelete(req.params.id);
-    await Review.deleteMany({_id : {$in : gym.reviews}})
-    req.flash('success', 'Your gym has been deleted');
-    res.redirect('/gyms')
+  const gym = await Gym.findByIdAndDelete(req.params.id);
+  await Review.deleteMany({ _id: { $in: gym.reviews } })
+  req.flash('success', 'Your gym has been deleted');
+  res.redirect('/gyms')
 })
 
 
