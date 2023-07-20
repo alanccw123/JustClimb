@@ -12,8 +12,8 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 // cloundinary config for hosting images
 cloudinary.config({
   cloud_name: process.env.cloudinary_name,
-  api_key: process.env.cloundinary_api_key,
-  api_secret: process.env.cloundinary_api_secret,
+  api_key: process.env.cloudinary_api_key,
+  api_secret: process.env.cloudinary_api_secret,
   secure: true
 });
 const storage = new CloudinaryStorage({

@@ -1,3 +1,6 @@
+// for loading env in development, delete in production
+require('dotenv').config();
+
 // packages
 const express = require('express');
 const app = express();
@@ -20,8 +23,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// for loading env in development, delete in production
-require('dotenv').config()
+
 
 // connect to db
 mongoose.connect('mongodb://127.0.0.1:27017/JustClimb').then(
@@ -129,6 +131,7 @@ app.all('*', (req, res) => {
 
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
+    console.log(err)
     res.status(statusCode).render('error', {err})
 })   
 
