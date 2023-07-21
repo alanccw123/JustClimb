@@ -7,9 +7,10 @@ const isOwner = require('../utils/isOwner');
 const multer = require('multer')
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const {Client} = require("@googlemaps/google-maps-services-js");
 
 
-// cloundinary config for hosting images
+// cloundinary api config for hosting images
 cloudinary.config({
   cloud_name: process.env.cloudinary_name,
   api_key: process.env.cloudinary_api_key,
@@ -24,18 +25,27 @@ const storage = new CloudinaryStorage({
 });
 const upload = multer({ storage: storage });
 
+//google map api client for goecoding
+const client = new Client({});
+
 // gym routes
 router.get('/new', loginRequired, async (req, res) => {
   res.render('gym/newgym');
 })
 
 router.post('/new', loginRequired, upload.array('images', 8), async (req, res) => {
+  const location = await client.geocode({params:{
+    key: process.env.googlemap_api_key,
+    address: req.body.location
+  }});
+  const {lat, lng} = location.data.results[0].geometry.location;
   const gym = new Gym(req.body.gym);
+  gym.location = {type: 'Point', coordinates: [lng , lat]};
   gym.images = req.files.map((file) => file.path)
   gym.owner = req.user._id
   await gym.save();
   req.flash('success', 'Your gym has been added');
-  res.redirect('/gyms');
+  res.redirect(`/gyms/${gym._id}`);
 })
 
 router.get('/:id', async (req, res) => {

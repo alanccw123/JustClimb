@@ -9,7 +9,13 @@ const populate = async() => {
     for (let index = 0; index < 50; index++) {
         const random = Math.floor(Math.random() * gyms.length)
         const gym = new Gym({name: gyms[random].name, 
-            location: gyms[random].city, description: gyms[random].description,
+            location: {
+                "type" : "Point",
+                "coordinates" : [
+                  -122.5,
+                  37.7
+                ]
+              }, description: gyms[random].description,
         images: ['https://source.unsplash.com/random/900X700/?gym'], owner: '64b15ce9f69ef4e4ae2f4dd5'});
         await gym.save();    
     };
