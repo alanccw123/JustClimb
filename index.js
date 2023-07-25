@@ -1,5 +1,8 @@
 // for loading env in development, delete in production
-require('dotenv').config();
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config(); // serve secure cookies
+}
+
 
 // packages
 const express = require('express');
@@ -18,12 +21,26 @@ const flash = require('connect-flash');
 const User = require('./models/user');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-
+//session and cookie setting
+const sess = {
+    name: 'JustClimbId',
+    secret: process.env.session_secret,
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7
+    },
+    resave: false
+}
+if (process.env.NODE_ENV === 'production') {
+    sess.cookie.secure = true // serve secure cookies
+}
 
 // connect to db
 mongoose.connect('mongodb://127.0.0.1:27017/JustClimb').then(
@@ -44,10 +61,20 @@ app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
 app.use(morgan('tiny'))
 app.use(express.static('public'))
-app.use(session({saveUninitialized: true, secret: 'cryptographysucks'}))
+app.use(session(sess))
 app.use(flash())
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(helmet({
+    contentSecurityPolicy: {
+        directives: {
+          "script-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net/"],
+          "img-src":["'self'", "data:", "https://source.unsplash.com/", "https://images.unsplash.com/",
+          "https://maps.googleapis.com/", "https://res.cloudinary.com/"],
+        },
+      },
+  }));
+app.use(mongoSanitize());
 app.use((req, res, next) => {
     res.locals.success = req.flash('success');
     res.locals.error = req.flash('error');
