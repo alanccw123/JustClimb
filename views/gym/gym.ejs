@@ -47,6 +47,7 @@
   </div>
   
   <div class="col-6">
+    <img src="https://maps.googleapis.com/maps/api/staticmap?size=400x400&zoom=14&markers=color:blue|<%= gym.location.coordinates[1] %>,<%= gym.location.coordinates[0] %>&key=<%= process.env.googlemap_api_key%>" alt="">
     <h5>How do climbers think about this place?</h3>
     <div>
       
