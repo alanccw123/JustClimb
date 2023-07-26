@@ -34,7 +34,7 @@
         <li class="list-group-item"><%= gym.location %></li>
         <li class="list-group-item">Price</li>
       </ul>
-      <% if (isLoggedin && loggedinUser._id.equals(gym.owner)) { %>
+      <% if (isLoggedin && (loggedinUser._id.equals(gym.owner) || loggedinUser.isAdmin)) { %>
         <div class="card-body">
           <a class="btn btn-primary" href="/gyms/<%= gym._id %>/edit">Edit</a>
           <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
@@ -78,9 +78,11 @@
               <p class="starability-result" data-rating="<%= review.rating %>">
               <p><%= review.comment %></p>
               <p><%= review.createdAt %></p>
-              <form action="/gyms/<%=gym._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
-                <button class="btn btn-sm btn-danger">Delete</button>
-            </form>
+              <% if (isLoggedin && (loggedinUser._id.equals(review.author._id) || loggedinUser.isAdmin)) { %>
+                <form action="/gyms/<%=gym._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+                  <button class="btn btn-sm btn-danger">Delete</button>
+              </form>
+              <% } %>    
             </div>        
           </div>      
         <% } %>

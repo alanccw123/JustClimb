@@ -8,8 +8,15 @@ router.get('/register', async(req, res) => {
 })
 
 router.post('/register', async(req, res) => {
-    const {username, password} = req.body;
-    await User.register({username}, password);
+    const newUser = new User({username: req.body.username})
+    if (req.body.owner) {
+        newUser.isOwner = true;
+    }
+    if(req.body.username === process.env.default_admin){
+        newUser.isAdmin = true;
+    }
+    await User.register(newUser, req.body.password);
+    
     res.redirect('/gyms')
 })
 

@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://127.0.0.1:27017/JustClimb');
 const Gym = require('./models/gym');
+const User = require('./models/user');
 const gyms = require('./seed');
 
 const populate = async() => {
     await Gym.deleteMany({});
+    await User.deleteMany({});
+
+    const dummy = await User.register({username: 'alan', isOwner: true}, 'alan');
 
     for (let index = 0; index < 50; index++) {
         const random = Math.floor(Math.random() * gyms.length)
@@ -12,11 +16,11 @@ const populate = async() => {
             location: {
                 "type" : "Point",
                 "coordinates" : [
-                  -122.5,
-                  37.7
+                  gyms[random].longitude,
+                  gyms[random].latitude
                 ]
               }, description: gyms[random].description,
-        images: ['https://source.unsplash.com/random/900X700/?gym'], owner: '64b15ce9f69ef4e4ae2f4dd5'});
+        images: ['https://source.unsplash.com/random/900X700/?gym'], owner: dummy._id});
         await gym.save();    
     };
 }

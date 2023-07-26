@@ -28,12 +28,20 @@ const upload = multer({ storage: storage });
 //google map api client for goecoding
 const client = new Client({});
 
+const isBusinessUser = async (req, res, next) => {
+  if (!req.user.isOwner) {
+      req.flash('error', 'Unauthorized action!');
+      return res.redirect("/gyms");
+  }
+  next();
+}
+
 // gym routes
-router.get('/new', loginRequired, async (req, res) => {
+router.get('/new', loginRequired, isBusinessUser, async (req, res) => {
   res.render('gym/newgym');
 })
 
-router.post('/new', loginRequired, upload.array('images', 8), async (req, res) => {
+router.post('/new', loginRequired, isBusinessUser, upload.array('images', 8), async (req, res) => {
   const location = await client.geocode({params:{
     key: process.env.googlemap_api_key,
     address: req.body.location
