@@ -21,4 +21,6 @@ const gymSchema = new mongoose.Schema({
         ref: "review"}]
 });
 
+gymSchema.index({ location: "2dsphere" });
+
 module.exports = mongoose.model('Gym', gymSchema);

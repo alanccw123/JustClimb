@@ -19,10 +19,12 @@ const auth = require('./routes/auth')
 const session = require('express-session')
 const flash = require('connect-flash');
 const User = require('./models/user');
+const Gym = require('./models/gym');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
+const geoip = require('geoip-lite');
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -55,6 +57,7 @@ console.log(err);
 app.set('view engine', 'ejs');
 app.engine('ejs', require('ejs-mate'))
 app.set('views', path.join(__dirname,'views'));
+app.set('trust proxy', true);
 
 // middleware
 app.use(express.urlencoded({extended: true}))
@@ -90,8 +93,20 @@ app.use('/gyms', gyms);
 app.use('/gyms/:id/reviews', reviews);
 
 
-app.get('/', (req, res) => {
-    res.render('index');
+app.get('/', async(req, res) => {
+    
+    const geo = geoip.lookup("5.151.139.58");
+    const gyms = await Gym.find({
+        location: {
+            $near: {
+                $geometry: {
+                    type: 'Point',
+                    coordinates: [geo.ll[1], geo.ll[0]]
+                }
+            }
+        }
+    }).limit(10)
+    res.render('index', { gyms });
 })
 
 

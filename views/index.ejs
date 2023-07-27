@@ -7,6 +7,12 @@
     <title>Home</title>
 </head>
 <body>
-    <div>Hiiii</div>
+    <div>Showing gyms closest to you!</div>
+    <ul>
+        <% for(let gym of gyms) { %>
+            <li><a href="/gyms/<%= gym._id %>"><%= gym.name %></a></li>
+        <% } %>
+    </ul>
+    
 </body>
 </html>
