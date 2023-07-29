@@ -31,8 +31,7 @@
         <p class="card-text"><%= gym.description %></p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item"><%= gym.location %></li>
-        <li class="list-group-item">Price</li>
+        <li class="list-group-item">$<%= gym.price %></li>
       </ul>
       <% if (isLoggedin && (loggedinUser._id.equals(gym.owner) || loggedinUser.isAdmin)) { %>
         <div class="card-body">

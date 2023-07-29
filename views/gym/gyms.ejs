@@ -1,4 +1,27 @@
 <% layout('template') %>
+<div class="navbar bg-body-tertiary">
+    <div class="container-fluid">
+        <!-- <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Sort by
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/gyms/query?sortby=new">Newest</a></li>
+              <li><a class="dropdown-item" href="/gyms/query?sortby=pricedesc">Highest Price</a></li>
+            </ul>
+          </div> -->
+
+        <form class="d-flex" role="search" action="/gyms/query" method="get">
+            <select class="form-select" name="sortby" aria-label="Default select example">
+                <option value="new">Sorted by</option>
+                <option value="new">Newest</option>
+                <option value="pricedesc">Highest Price</option>
+              </select>
+          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search" value="<%= search %>">
+          <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>
 
 <% for(let gym of gyms) { %>
     <div class="card">
@@ -9,7 +32,7 @@
             <div class="col-md-8">
                 <div class="card-body">
                     <h5 class="card-title"><%= gym.name %></h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">$<%= gym.price %></h6>
                     <p class="card-text"><%= gym.description %></p>
                     <a href="/gyms/<%= gym._id %>">Learn more</a>
                   </div>
@@ -17,4 +40,10 @@
         </div>
            
       </div>
+<% } %>
+
+<% if (gyms.length === 0) { %>
+    <div>
+        <h3>Sorry! We cant find anything at the moment...</h3>
+    </div>
 <% } %>

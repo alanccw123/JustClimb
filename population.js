@@ -4,24 +4,30 @@ const Gym = require('./models/gym');
 const User = require('./models/user');
 const gyms = require('./seed');
 
-const populate = async() => {
+const populate = async () => {
     await Gym.deleteMany({});
     await User.deleteMany({});
 
-    const dummy = await User.register({username: 'alan', isOwner: true}, 'alan');
+    const dummy = await User.register({ username: 'alan', isOwner: true }, 'alan');
 
     for (let index = 0; index < 50; index++) {
         const random = Math.floor(Math.random() * gyms.length)
-        const gym = new Gym({name: gyms[random].name, 
+        const gym = new Gym({
+            name: gyms[random].name,
             location: {
-                "type" : "Point",
-                "coordinates" : [
-                  gyms[random].longitude,
-                  gyms[random].latitude
+                "type": "Point",
+                "coordinates": [
+                    gyms[random].longitude,
+                    gyms[random].latitude
                 ]
-              }, description: gyms[random].description,
-        images: ['https://source.unsplash.com/random/900X700/?gym'], owner: dummy._id});
-        await gym.save();    
+            },
+            description: gyms[random].description,
+            images: ['https://source.unsplash.com/random/900X700/?gym'],
+            owner: dummy._id,
+            price: Math.floor(Math.random() * 20) + 1
+
+        });
+        await gym.save();
     };
 }
 

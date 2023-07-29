@@ -7,6 +7,15 @@
     <title>Home</title>
 </head>
 <body>
+    <div class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <form class="d-flex" role="search" action="/gyms/query" method="get">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+    </div>
+
     <div>Showing gyms closest to you!</div>
     <ul>
         <% for(let gym of gyms) { %>

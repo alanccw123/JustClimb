@@ -7,7 +7,7 @@ const isOwner = require('../utils/isOwner');
 const multer = require('multer')
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const {Client} = require("@googlemaps/google-maps-services-js");
+const { Client } = require("@googlemaps/google-maps-services-js");
 
 
 // cloundinary api config for hosting images
@@ -30,8 +30,8 @@ const client = new Client({});
 
 const isBusinessUser = async (req, res, next) => {
   if (!req.user.isOwner) {
-      req.flash('error', 'Unauthorized action!');
-      return res.redirect("/gyms");
+    req.flash('error', 'Unauthorized action!');
+    return res.redirect("/gyms");
   }
   next();
 }
@@ -42,13 +42,15 @@ router.get('/new', loginRequired, isBusinessUser, async (req, res) => {
 })
 
 router.post('/new', loginRequired, isBusinessUser, upload.array('images', 8), async (req, res) => {
-  const location = await client.geocode({params:{
-    key: process.env.googlemap_api_key,
-    address: req.body.location
-  }});
-  const {lat, lng} = location.data.results[0].geometry.location;
+  const location = await client.geocode({
+    params: {
+      key: process.env.googlemap_api_key,
+      address: req.body.location
+    }
+  });
+  const { lat, lng } = location.data.results[0].geometry.location;
   const gym = new Gym(req.body.gym);
-  gym.location = {type: 'Point', coordinates: [lng , lat]};
+  gym.location = { type: 'Point', coordinates: [lng, lat] };
   gym.images = req.files.map((file) => file.path)
   gym.owner = req.user._id
   await gym.save();
@@ -56,14 +58,45 @@ router.post('/new', loginRequired, isBusinessUser, upload.array('images', 8), as
   res.redirect(`/gyms/${gym._id}`);
 })
 
+router.get('/query', async (req, res) => {
+  let search = {}
+  let sortby = {}
+  if (req.query.search) {
+    search = { $text: { $search: req.query.search } }
+  }
+  if (req.query.sortby === 'new') {
+    sortby = {createdAt: -1}
+  }else if (req.query.sortby === 'pricedesc'){
+    sortby = {price: -1}
+  }
+  // const gyms = await Gym.find({ $text: { $search: req.query.search } },
+  //   { score: { $meta: "textScore" } })
+  //   .sort({ score: { $meta: "textScore" } })
+  const gyms = await Gym.find(search).sort(sortby);
+  res.render('gym/gyms', { gyms, search: req.query.search });
+})
+
+router.get('/sorted', async(req, res) =>{
+  const query = req.query.sortby
+  let gyms;
+  if (query === 'new') {
+    gyms = await Gym.find({})
+    .sort({createdAt: -1})
+  }else if (query === 'pricedesc'){
+    gyms = await Gym.find({})
+    .sort({price: -1})
+  }
+    res.render('gym/gyms', {gyms, search: req.query.search})
+})
+
 router.get('/:id', async (req, res) => {
   const gym = await Gym.findById(req.params.id).populate('reviews');
-  res.render('gym/gym', { gym });
+  res.render('gym/gym', { gym});
 })
 
 router.get('/', async (req, res) => {
   const gyms = await Gym.find({});
-  res.render('gym/gyms', { gyms });
+  res.render('gym/gyms', { gyms, search: req.query.search });
 })
 
 router.get('/:id/edit', loginRequired, isOwner, async (req, res) => {
