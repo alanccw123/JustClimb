@@ -3,7 +3,9 @@
 <div class="alert alert-danger" role="alert">
     <h4 class="alert-heading">Something went wrong!</h4>
     <%= err.message %>
-    <div><%= err.stack %></div>
+    <% if (process.env.NODE_ENV !== 'production') { %>
+        <div><%= err.stack %></div>
+    <% } %>
     
 </div>
 

@@ -1,4 +1,4 @@
-// for loading env in development, delete in production
+// for loading env in development
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config(); // serve secure cookies
 }
@@ -16,6 +16,7 @@ const AppError = require('./utils/AppError')
 const gyms = require('./routes/gym')
 const reviews = require('./routes/review')
 const auth = require('./routes/auth')
+const booking = require('./routes/booking')
 const session = require('express-session')
 const flash = require('connect-flash');
 const User = require('./models/user');
@@ -25,6 +26,7 @@ const LocalStrategy = require('passport-local');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const geoip = require('geoip-lite');
+const Booking = require('./models/booking');
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -71,7 +73,7 @@ app.use(passport.session());
 app.use(helmet({
     contentSecurityPolicy: {
         directives: {
-          "script-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net/"],
+          "script-src": ["'self'", "'unsafe-inline'", "https://cdn.jsdelivr.net/", "https://cdnjs.cloudflare.com/"],
           "img-src":["'self'", "data:", "https://source.unsplash.com/", "https://images.unsplash.com/",
           "https://maps.googleapis.com/", "https://res.cloudinary.com/"],
         },
@@ -90,6 +92,7 @@ app.use((req, res, next) => {
 // routers
 app.use('/', auth);
 app.use('/gyms', gyms);
+app.use('/bookings', booking);
 app.use('/gyms/:id/reviews', reviews);
 
 
@@ -110,62 +113,6 @@ app.get('/', async(req, res) => {
 })
 
 
-// // gym routes
-// app.get('/gyms/new', async(req, res) => {
-//     res.render('gym/newgym');
-// })
-
-// app.post('/gyms/new', async(req, res) => {
-//     const gym = new Gym(req.body.gym);
-//     await gym.save();
-//     res.redirect('/gyms');
-// })
-
-// app.get('/gyms/:id', async (req, res) => {
-//     const gym = await Gym.findById({_id: req.params.id}).populate('reviews');
-//     res.render('gym/gym', {gym});
-// })
-
-// app.get('/gyms', async (req, res) => {
-//     const gyms = await Gym.find({});
-//     res.render('gym/gyms', {gyms});
-// }) 
-
-// app.get('/gyms/:id/edit', async (req, res) => {
-//     const gym = await Gym.findById(req.params.id);
-//     res.render('gym/edit', {gym});
-// })
-
-// app.put('/gyms/:id/edit', async (req, res) => {
-//     const gym = await Gym.updateOne({_id: req.params.id}, req.body.gym);
-//     res.redirect(`/gyms/${req.params.id}`)
-// })
-
-// app.delete('/gyms/:id/delete', async (req, res) => {
-//     const gym = await Gym.findByIdAndDelete(req.params.id);
-//     await Review.deleteMany({_id : {$in : gym.reviews}})
-//     res.redirect('/gyms')
-// })
-
-// review routes
-// app.post('/gyms/:id/reviews', async (req, res) => {
-//     const review = new Review(req.body.review)
-//     const gym = await Gym.findById(req.params.id)
-//     gym.reviews.push(review)
-//     await review.save()
-//     await gym.save()
-//     res.redirect(`/gyms/${req.params.id}`)
-// })
-
-// app.delete('/gyms/:id/reviews/:reviewid', async(req, res) => {
-//     console.log("delete")
-//     await Review.findByIdAndDelete(req.params.reviewid);
-//     await Gym.findByIdAndUpdate(req.params.id, { $pull: { reviews: req.params.reviewid} });
-//     res.redirect(`/gyms/${req.params.id}`);
-// })
-
-
-
 // error handling
 app.all('*', (req, res) => {
     throw new AppError('Not found', 404)
@@ -173,7 +120,6 @@ app.all('*', (req, res) => {
 
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
-    console.log(err)
     res.status(statusCode).render('error', {err})
 })   
 

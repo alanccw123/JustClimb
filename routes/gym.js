@@ -76,19 +76,6 @@ router.get('/query', async (req, res) => {
   res.render('gym/gyms', { gyms, search: req.query.search });
 })
 
-router.get('/sorted', async(req, res) =>{
-  const query = req.query.sortby
-  let gyms;
-  if (query === 'new') {
-    gyms = await Gym.find({})
-    .sort({createdAt: -1})
-  }else if (query === 'pricedesc'){
-    gyms = await Gym.find({})
-    .sort({price: -1})
-  }
-    res.render('gym/gyms', {gyms, search: req.query.search})
-})
-
 router.get('/:id', async (req, res) => {
   const gym = await Gym.findById(req.params.id).populate('reviews');
   res.render('gym/gym', { gym});
