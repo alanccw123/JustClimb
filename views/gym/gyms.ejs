@@ -1,7 +1,7 @@
 <% layout('template') %>
-<div class="navbar bg-body-tertiary">
+  <div class="navbar bg-body-tertiary">
     <div class="container-fluid">
-        <!-- <div class="dropdown">
+      <!-- <div class="dropdown">
             <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
               Sort by
             </button>
@@ -11,39 +11,127 @@
             </ul>
           </div> -->
 
-        <form class="d-flex" role="search" action="/gyms/query" method="get">
-            <select class="form-select" name="sortby" aria-label="Default select example">
-                <option value="new">Sorted by</option>
-                <option value="new">Newest</option>
-                <option value="pricedesc">Highest Price</option>
-              </select>
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search" value="<%= search %>">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
+      <form class="d-flex" id="queryForm" role="search" action="/gyms" method="get">
+        <select class="form-select" name="sortby" aria-label="Default select example">
+          <option value="">Sorted by</option>
+          <option value="new" <%=query.sortby==="new" ? "selected" : "" %>>Newest</option>
+          <option value="pricedesc" <%=query.sortby==="pricedesc" ? "selected" : "" %>>Highest Price</option>
+        </select>
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search"
+          id="search" value="<%= query.search %>">
+        <button class="btn btn-outline-success" type="submit">Search</button>
+      </form>
     </div>
-</div>
+  </div>
 
-<% for(let gym of gyms) { %>
+  <div id="gyms"></div>
+
+  <!-- <% for(let gym of gyms) { %>
     <div class="card">
-        <div class="row">
-            <div class="col-md-4">
-                <img src="<%= gym.images[0] %>" class="img-fluid rounded-start" alt="photo">
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title"><%= gym.name %></h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">$<%= gym.price %></h6>
-                    <p class="card-text"><%= gym.description %></p>
-                    <a href="/gyms/<%= gym._id %>">Learn more</a>
-                  </div>
-            </div>  
+      <div class="row">
+        <div class="col-md-4">
+          <img src="<%= gym.images[0] %>" class="img-fluid rounded-start" alt="photo">
         </div>
-           
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">
+              <%= gym.name %>
+            </h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">$<%= gym.price %>
+            </h6>
+            <p class="card-text">
+              <%= gym.description %>
+            </p>
+            <a href="/gyms/<%= gym._id %>">Learn more</a>
+          </div>
+        </div>
       </div>
-<% } %>
 
-<% if (gyms.length === 0) { %>
-    <div>
-        <h3>Sorry! We cant find anything at the moment...</h3>
     </div>
-<% } %>
+    <% } %> -->
+
+  <% if (gyms.length===0) { %>
+    <div>
+      <h3>Sorry! We cant find anything at the moment...</h3>
+    </div>
+    <% } %>
+
+      <nav aria-label="Page navigation example">
+        <ul class="pagination">
+        </ul>
+      </nav>
+      <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+      <script>
+        const getGyms = async (URL) => {
+          await $.ajax({
+            type: "GET",
+            url: "/gyms/query?" + URL,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            encode: true,
+          }).done(function (res) {
+            total = res.total
+            let gyms = ""
+            for (let index = 0; index < res.data.length; index++) {
+              gyms += `<div class="card">
+      <div class="row">
+        <div class="col-md-4">
+          <img src="${res.data[index].images[0]}" class="img-fluid rounded-start" alt="photo">
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">
+              ${res.data[index].name}
+            </h5>
+            <h6 class="card-subtitle mb-2 text-body-secondary">$${res.data[index].price}
+            </h6>
+            <p class="card-text">
+              ${res.data[index].description}
+            </p>
+            <a href="/gyms/${res.data[index]._id}">Learn more</a>
+          </div>
+        </div>
+      </div>
+      </div>`
+            }
+            document.querySelector("#gyms").innerHTML = gyms;
+            currentPage = res.page;
+            $(window).scrollTop(0);
+          }).fail(function (res) {
+            console.log(res)
+          });
+        }
+
+        const initialize = async () => {
+          const formData = new FormData(document.querySelector("#queryForm"))
+          const URL = new URLSearchParams(formData).toString();
+          await getGyms(URL);
+          let pageItems = ""
+          for (let index = 0; index < total / 10; index++) {
+            pageItems += `<li class="page-item"><a class="page-link" >${index + 1}</a></li>`
+          }
+          document.querySelector(".pagination").innerHTML = pageItems;
+          const buttons = document.querySelectorAll(".page-link")
+          buttons.forEach(button => {
+            button.addEventListener("click", async (event) => {
+              await getPage(parseInt(event.target.innerHTML));
+              event.preventDefault();
+            })
+          })
+          document.querySelectorAll(".page-item")[currentPage - 1].classList.add('active')
+        }
+
+        const getPage = async (page) => {
+          const formData = new FormData(document.querySelector("#queryForm"))
+          formData.append("page", page)
+          document.querySelectorAll(".page-item")[currentPage - 1].classList.remove('active')
+          await getGyms(new URLSearchParams(formData).toString())
+          document.querySelectorAll(".page-item")[currentPage - 1].classList.add('active')
+        }
+
+        let currentPage = 1;
+        let total = 0;
+        $(document).ready(initialize());
+
+      </script>

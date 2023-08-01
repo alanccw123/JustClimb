@@ -62,6 +62,8 @@ router.post('/new', loginRequired, isBusinessUser, upload.array('images', 8), as
 router.get('/query', async (req, res) => {
   let search = {}
   let sortby = {}
+  const page = req.query.page || 1
+
   if (req.query.search) {
     search = { $text: { $search: req.query.search } }
   }
@@ -73,9 +75,18 @@ router.get('/query', async (req, res) => {
   // const gyms = await Gym.find({ $text: { $search: req.query.search } },
   //   { score: { $meta: "textScore" } })
   //   .sort({ score: { $meta: "textScore" } })
-  const gyms = await Gym.find(search).sort(sortby);
-  res.render('gym/gyms', { gyms, search: req.query.search });
+  const gyms = await Gym.find(search).sort(sortby).limit(10).skip((page - 1) * 10);
+  const total = await Gym.countDocuments(search);
+
+  const response = {
+    total, 
+    page,
+    data: gyms,
+  }
+  res.json(response);
+  // res.render('gym/gyms', { gyms, search: req.query.search });
 })
+
 
 router.get('/:id', async (req, res) => {
   const gym = await Gym.findById(req.params.id).populate('reviews');
@@ -84,7 +95,7 @@ router.get('/:id', async (req, res) => {
 
 router.get('/', async (req, res) => {
   const gyms = await Gym.find({});
-  res.render('gym/gyms', { gyms, search: req.query.search });
+  res.render('gym/gyms', { gyms, query: req.query });
 })
 
 router.get('/:id/edit', loginRequired, isOwner, async (req, res) => {
