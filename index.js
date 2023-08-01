@@ -1,6 +1,6 @@
-// for loading env in development
+// for loading .env in development
 if (process.env.NODE_ENV !== 'production') {
-    require('dotenv').config(); // serve secure cookies
+    require('dotenv').config(); 
 }
 
 
@@ -28,6 +28,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const geoip = require('geoip-lite');
 const Booking = require('./models/booking');
 
+// passport authentication middleware config
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -96,6 +97,7 @@ app.use('/bookings', booking);
 app.use('/gyms/:id/reviews', reviews);
 
 
+// home page route
 app.get('/', async(req, res) => {
     
     const geo = geoip.lookup("5.151.139.58");
@@ -113,11 +115,12 @@ app.get('/', async(req, res) => {
 })
 
 
-// error handling
+// catch any unmatched requests
 app.all('*', (req, res) => {
     throw new AppError('Not found', 404)
 })
 
+// error handling middleware
 app.use((err, req, res, next) => {
     const { statusCode = 500 } = err;
     res.status(statusCode).render('error', {err})

@@ -28,6 +28,7 @@ const upload = multer({ storage: storage });
 //google map api client for goecoding
 const client = new Client({});
 
+// helper function
 const isBusinessUser = async (req, res, next) => {
   if (!req.user.isOwner) {
     req.flash('error', 'Unauthorized action!');
