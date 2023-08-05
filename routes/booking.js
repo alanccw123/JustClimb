@@ -7,6 +7,7 @@ const { route } = require('express/lib/router');
 
 router.post('/new', async(req, res) =>{
     if (!req.isAuthenticated()) {
+        req.session.redirectTo = req.body.gym_id;
         return res.status(401).json('/login')
     }
     

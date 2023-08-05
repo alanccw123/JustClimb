@@ -16,18 +16,24 @@ router.post('/register', async(req, res) => {
         newUser.isAdmin = true;
     }
     await User.register(newUser, req.body.password);
-    
-    res.redirect('/gyms')
+    req.login(newUseruser, function(err) {
+        if (err) { return next(err); }
+        req.flash('success', 'You have created a new account!')
+        return res.redirect('/gyms');
+      });
 })
 
 router.get('/login', async(req,res) => {
     res.render('auth/login');
 })
 
-router.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true }), 
+router.post('/login', passport.authenticate('local', { failureRedirect: '/login', failureFlash: true, keepSessionInfo: true }), 
 (req,res) => {
+    const redirectTo = req.session.redirectTo || '';
+    delete req.session.redirectTo;
     req.flash('success', 'Welcome back!');
-    res.redirect('/gyms');
+    console.log(redirectTo);
+    res.redirect('/gyms/' + redirectTo);
 })
 
 router.get('/logout', function(req, res) {
