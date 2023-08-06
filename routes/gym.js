@@ -8,6 +8,7 @@ const multer = require('multer')
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const { Client } = require("@googlemaps/google-maps-services-js");
+const AppError = require('../utils/AppError');
 
 
 // cloundinary api config for hosting images
@@ -32,7 +33,7 @@ const client = new Client({});
 const isBusinessUser = async (req, res, next) => {
   if (!req.user.isOwner) {
     req.flash('error', 'Unauthorized action!');
-    return res.redirect("/gyms");
+    return res.status(403).redirect("/gyms");
   }
   next();
 }
@@ -43,6 +44,7 @@ router.get('/new', loginRequired, isBusinessUser, async (req, res) => {
 })
 
 router.post('/new', loginRequired, isBusinessUser, upload.array('images', 8), async (req, res) => {
+
   const location = await client.geocode({
     params: {
       key: process.env.googlemap_api_key,
@@ -52,6 +54,7 @@ router.post('/new', loginRequired, isBusinessUser, upload.array('images', 8), as
   const { lat, lng } = location.data.results[0].geometry.location;
   const gym = new Gym(req.body.gym);
   gym.location = { type: 'Point', coordinates: [lng, lat] };
+  gym.location_string = req.body.location
   gym.images = req.files.map((file) => file.path)
   gym.owner = req.user._id
   await gym.save();
@@ -68,9 +71,9 @@ router.get('/query', async (req, res) => {
     search = { $text: { $search: req.query.search } }
   }
   if (req.query.sortby === 'new') {
-    sortby = {createdAt: -1}
-  }else if (req.query.sortby === 'pricedesc'){
-    sortby = {price: -1}
+    sortby = { createdAt: -1 }
+  } else if (req.query.sortby === 'pricedesc') {
+    sortby = { price: -1 }
   }
   // const gyms = await Gym.find({ $text: { $search: req.query.search } },
   //   { score: { $meta: "textScore" } })
@@ -79,7 +82,7 @@ router.get('/query', async (req, res) => {
   const total = await Gym.countDocuments(search);
 
   const response = {
-    total, 
+    total,
     page,
     data: gyms,
   }
@@ -90,27 +93,39 @@ router.get('/query', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   const gym = await Gym.findById(req.params.id).populate('reviews');
-  res.render('gym/gym', { gym});
+  if (!gym) {
+    throw new AppError('Gym not found', 404)
+  }
+  res.render('gym/gym', { gym });
 })
 
 router.get('/', async (req, res) => {
-  const gyms = await Gym.find({});
-  res.render('gym/gyms', { gyms, query: req.query });
+  res.render('gym/gyms', { query: req.query });
 })
 
 router.get('/:id/edit', loginRequired, isOwner, async (req, res) => {
   const gym = await Gym.findById(req.params.id);
+  if (!gym) {
+    throw new AppError('Gym not found', 404)
+  }
   res.render('gym/edit', { gym });
 })
 
+
 router.put('/:id/edit', loginRequired, isOwner, async (req, res) => {
-  const gym = await Gym.updateOne({ _id: req.params.id }, req.body.gym);
+  const gym = await Gym.updateOne({ _id: req.params.id }, req.body.gym, { runValidators: true });
+  if (!gym) {
+    throw new AppError('Gym not found', 404)
+  }
   req.flash('success', 'Changed saved');
   res.redirect(`/gyms/${req.params.id}`)
 })
 
 router.delete('/:id/delete', loginRequired, isOwner, async (req, res) => {
   const gym = await Gym.findByIdAndDelete(req.params.id);
+  if (!gym) {
+    throw new AppError('Gym not found', 404)
+  }
   await Review.deleteMany({ _id: { $in: gym.reviews } })
   req.flash('success', 'Your gym has been deleted');
   res.redirect('/gyms')

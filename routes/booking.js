@@ -14,7 +14,7 @@ router.post('/new', async(req, res) =>{
     const {gym_id, date, quantity} = req.body;
     const gym = await Gym.findById(gym_id)
     if (!gym) {
-        return res.json('gym not found')
+        return res.status(400).json('gym not found')
     }
     const booking = new Booking({
         totalPrice: quantity * gym.price,
@@ -24,7 +24,7 @@ router.post('/new', async(req, res) =>{
         gym: gym_id
     });
     await booking.save()
-    res.json('ok')
+    res.status(200).json('ok')
 })
 
 

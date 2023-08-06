@@ -1,9 +1,19 @@
 const mongoose = require('mongoose');
 
 const gymSchema = new mongoose.Schema({
-  name: String,
+  name: {
+    type: String,
+    require: [true, 'Gym name is required']
+  },
   description: String,
-  price: Number,
+  price: {
+    type: Number,
+    require: [true, 'Price for day-pass is required']
+  },
+  location_string: {
+    type: String,
+    required: true
+  },
   location: {
     type: {
       type: String,
@@ -12,17 +22,18 @@ const gymSchema = new mongoose.Schema({
     },
     coordinates: {
       type: [Number],
-      required: true
+      required: [true, 'Co-ordinates are required']
     }
   },
   images: [String],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user"
+    ref: "user",
+    require: [true, 'Owner id is required']
   },
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "review"
+    ref: "review",
   }]
 }, {timestamps: true});
 

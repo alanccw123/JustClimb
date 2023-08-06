@@ -16,7 +16,7 @@ router.post('/register', async(req, res) => {
         newUser.isAdmin = true;
     }
     await User.register(newUser, req.body.password);
-    req.login(newUseruser, function(err) {
+    req.login(newUser, function(err) {
         if (err) { return next(err); }
         req.flash('success', 'You have created a new account!')
         return res.redirect('/gyms');

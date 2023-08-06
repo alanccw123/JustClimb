@@ -9,8 +9,12 @@
             </div>
             <div class="mb-3">
               <label for="location" class="form-label">Location</label>
-              <input type="text" class="form-control" name="gym[location]" id="location" value="<%= gym.location %>" aria-describedby="emailHelp" required>
+              <input type="text" class="form-control" name="gym[location_string]" id="location" value="<%= gym.location_string %>" aria-describedby="emailHelp" required>
             </div>
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="text" class="form-control" name="gym[price]" id="price" value="<%= gym.price %>" aria-describedby="emailHelp" required>
+              </div>
             <div class="mb-3">
                 <label class="form-label" for="description">Description</label>
                 <textarea name="gym[description]" class='form-control' id="description" cols="30" rows="10" required><%= gym.description %>

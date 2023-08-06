@@ -100,7 +100,7 @@ app.use('/gyms/:id/reviews', reviews);
 // home page route
 app.get('/', async(req, res) => {
     
-    const geo = geoip.lookup("5.151.139.58");
+    const geo = geoip.lookup('5.151.139.58');
     const gyms = await Gym.find({
         location: {
             $near: {
@@ -117,12 +117,19 @@ app.get('/', async(req, res) => {
 
 // catch any unmatched requests
 app.all('*', (req, res) => {
-    throw new AppError('Not found', 404)
+    throw new AppError('Cannot find the page you are looking for.', 404)
 })
 
 // error handling middleware
 app.use((err, req, res, next) => {
-    const { statusCode = 500 } = err;
+    let { statusCode = 500 } = err;
+    if (err instanceof mongoose.Error) {
+        statusCode = 400;
+        if (!err instanceof mongoose.Error.ValidationError) {
+            err.message = 'Invalid data'
+        }
+    }
+    console.dir(err)
     res.status(statusCode).render('error', {err})
 })   
 

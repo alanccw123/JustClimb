@@ -3,10 +3,14 @@ const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const User = new Schema({
-    isOwner: {type: Boolean,
-    default: false},
-    isAdmin: {type: Boolean,
-    default: false}
+    isOwner: {
+        type: Boolean,
+        default: false
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 User.plugin(passportLocalMongoose);
