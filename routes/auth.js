@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const Gym = require('../models/gym');
 const passport = require('passport');
 
 router.get('/register', async(req, res) => {
@@ -8,7 +9,7 @@ router.get('/register', async(req, res) => {
 })
 
 router.post('/register', async(req, res) => {
-    const newUser = new User({username: req.body.username})
+    const newUser = new User({username: req.body.username, email: req.body.email})
     if (req.body.owner) {
         newUser.isOwner = true;
     }
@@ -46,6 +47,12 @@ router.get('/logout', function(req, res) {
     });
 
 });
+
+router.get('/user/:id', async (req, res) => {
+    const user = await User.findById(req.params.id);
+    const gyms = await Gym.find({owner: req.params.id});
+    res.render('user/profile', {user, gyms});
+})
 
 
 

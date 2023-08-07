@@ -129,7 +129,7 @@ app.use((err, req, res, next) => {
             err.message = 'Invalid data'
         }
     }
-    console.dir(err)
+    console.log(err)
     res.status(statusCode).render('error', {err})
 })   
 
