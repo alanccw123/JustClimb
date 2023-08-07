@@ -27,5 +27,10 @@ router.post('/new', async(req, res) =>{
     res.status(200).json('ok')
 })
 
+router.get('/:id', loginRequired, async(req, res) => {
+    const bookings = await Booking.find({buyer: req.params.id}).populate('gym');
+    res.render('user/bookings', {bookings})
+})
+
 
 module.exports = router;

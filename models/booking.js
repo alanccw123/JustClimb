@@ -15,14 +15,14 @@ const bookingSchema = new mongoose.Schema({
     },
     gym: { 
         type: mongoose.Schema.Types.ObjectId,
-        ref: "gym",
+        ref: "Gym",
         require:[true, 'Gym id needed.']
     },
     buyer: { 
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: "User",
         require:[true, 'User id needed.']
     }
 }, {timestamps: true});
 
-module.exports = mongoose.model('booking', bookingSchema);
+module.exports = mongoose.model('Booking', bookingSchema);

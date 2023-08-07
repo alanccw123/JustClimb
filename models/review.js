@@ -8,9 +8,9 @@ const reviewSchema = new mongoose.Schema({
     },
     author: { 
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: "User",
         require: [true, 'Author id is required']
     }
 }, {timestamps: true});
 
-module.exports = mongoose.model('review', reviewSchema);
+module.exports = mongoose.model('Review', reviewSchema);

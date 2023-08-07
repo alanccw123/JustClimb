@@ -28,12 +28,12 @@ const gymSchema = new mongoose.Schema({
   images: [String],
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "user",
+    ref: "User",
     require: [true, 'Owner id is required']
   },
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "review",
+    ref: "Review",
   }]
 }, {timestamps: true});
 
