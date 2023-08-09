@@ -9,7 +9,7 @@
             <div class="card-body text-center">
               <img src="https://source.unsplash.com/random/900X700/?avatar" alt="avatar"
                 class="rounded-circle img-fluid" style="width: 150px;">
-              <h5 class="my-3">John Smith</h5>
+              <h5 class="my-3"><%= user.username %></h5>
               <% if (user.isOwner) { %>
                 <p class="text-muted mb-1">Gym Owner</p>
               <% } %>
