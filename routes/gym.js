@@ -92,7 +92,7 @@ router.get('/query', async (req, res) => {
 
 
 router.get('/:id', async (req, res) => {
-  const gym = await Gym.findById(req.params.id).populate('reviews');
+  const gym = await Gym.findById(req.params.id).populate({path: 'reviews', populate: {path: 'author'}}).populate('owner');
   if (!gym) {
     throw new AppError('Gym not found', 404)
   }
