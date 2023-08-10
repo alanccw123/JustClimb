@@ -28,7 +28,8 @@ const populate = async () => {
             },
             location_string: gyms[random].city,
             description: gyms[random].description,
-            images: ['https://source.unsplash.com/random/900x700/?gym'],
+            images: ['https://source.unsplash.com/random/900x700/?gym&1',
+            'https://source.unsplash.com/random/900x700/?gym&2'],
             owner: dummy._id,
             price: Math.floor(Math.random() * 20) + 1
 

@@ -110,7 +110,7 @@ app.get('/', async(req, res) => {
                 }
             }
         }
-    }).limit(10)
+    }).limit(10).populate('reviews')
     res.render('index', { gyms });
 })
 

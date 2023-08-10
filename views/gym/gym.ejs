@@ -1,20 +1,6 @@
 <% layout('template') %>
   <link rel="stylesheet" type="text/css" href="/stylesheets/starability-basic.min.css" />
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,500,700,900" rel="stylesheet">
-  <!-- Simple line Icon -->
-  <link rel="stylesheet" href="/stylesheets/css/simple-line-icons.css">
-  <!-- Themify Icon -->
-  <link rel="stylesheet" href="/stylesheets/css/themify-icons.css">
-  <!-- Hover Effects -->
-  <link rel="stylesheet" href="/stylesheets/css/set1.css">
-  <!-- Swipper Slider -->
-  <link rel="stylesheet" href="/stylesheets/css/swiper.min.css">
-  <!-- Magnific Popup CSS -->
-  <link rel="stylesheet" href="/stylesheets/css/magnific-popup.css">
-  <!-- Main CSS -->
-  <link rel="stylesheet" href="/stylesheets/css/style.css">
 
   <div class="row">
     <div class="col-6 mx-auto">
@@ -42,36 +28,39 @@
   </div>
 
   <section class="reserve-block">
-    <div class="row">
-      <div class="col-md-6">
-        <h5>
-          <%= gym.name %>
-        </h5>
-        <p><span>$<%= gym.price %></span></p>
-        <p class="reserve-description">Innovative cooking, paired with fine wines in a modern setting.</p>
-      </div>
-      <div class="col-md-6">
-        <div class="reserve-seat-block">
-          <div class="review-btn">
-            <a href="#review-form" class="btn btn-primary">WRITE A REVIEW</a>
-            <span>
-              <%= gym.reviews.length %> reviews
-            </span>
-          </div>
-          <% if (isLoggedin && (loggedinUser._id.equals(gym.owner) || loggedinUser.isAdmin)) { %>
-            <div class="card-body">
-              <a class="btn btn-info" href="/gyms/<%= gym._id %>/edit">Edit</a>
-              <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
-                <button class="btn btn-danger">Delete</button>
-              </form>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <h5>
+            <%= gym.name %>
+          </h5>
+          <p><span>$<%= gym.price %></span></p>
+          <p class="reserve-description">Innovative cooking, paired with fine wines in a modern setting.</p>
+        </div>
+        <div class="col-md-6">
+          <div class="reserve-seat-block">
+            <div class="review-btn">
+              <a href="#review-form" class="btn btn-primary">WRITE A REVIEW</a>
+              <span>
+                <%= gym.reviews.length %> reviews
+              </span>
             </div>
-            <% } %>
+            <% if (isLoggedin && (loggedinUser._id.equals(gym.owner) || loggedinUser.isAdmin)) { %>
+              <div class="card-body">
+                <a class="btn btn-info" href="/gyms/<%= gym._id %>/edit">Edit</a>
+                <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
+                  <button class="btn btn-danger">Delete</button>
+                </form>
+              </div>
+              <% } %>
+          </div>
         </div>
       </div>
     </div>
+    
   </section>
 
-  <section class="light-bg booking-details_wrap">
+  <section class="booking-details_wrap">
     <div class="container">
       <div class="row">
         <div class="col-md-8 responsive-wrap">
