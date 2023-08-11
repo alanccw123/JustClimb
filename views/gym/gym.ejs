@@ -36,28 +36,32 @@
           </h5>
           <p><span>$<%= gym.price %></span></p>
           <p class="reserve-description">Innovative cooking, paired with fine wines in a modern setting.</p>
+          <% if (isLoggedin && (loggedinUser._id.equals(gym.owner._id) || loggedinUser.isAdmin)) { %>
+            <div class="review-btn">
+              <a class="btn btn-info" href="/gyms/<%= gym._id %>/edit">Edit</a>
+              <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
+                <button class="btn btn-danger">Delete</button>
+              </form>
+            </div>
+
+
+            <% } %>
         </div>
         <div class="col-md-6">
           <div class="reserve-seat-block">
-            <div class="review-btn">
-              <a href="#review-form" class="btn btn-primary">WRITE A REVIEW</a>
-              <span>
-                <%= gym.reviews.length %> reviews
-              </span>
-            </div>
-            <% if (isLoggedin && (loggedinUser._id.equals(gym.owner) || loggedinUser.isAdmin)) { %>
-              <div class="card-body">
-                <a class="btn btn-info" href="/gyms/<%= gym._id %>/edit">Edit</a>
-                <form class="d-inline" action="/gyms/<%= gym._id %>/delete?_method=Delete" method="post">
-                  <button class="btn btn-danger">Delete</button>
-                </form>
+            
+            
+              <div class="review-btn">
+                <a href="#review-form" class="btn btn-primary">WRITE A REVIEW</a>
+                <span>
+                  <%= gym.reviews.length %> reviews
+                </span>
               </div>
-              <% } %>
           </div>
         </div>
       </div>
     </div>
-    
+
   </section>
 
   <section class="booking-details_wrap">

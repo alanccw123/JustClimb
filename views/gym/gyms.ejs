@@ -1,114 +1,189 @@
 <% layout('template') %>
-  <div class="navbar bg-body-tertiary">
+  <section class="vh-100">
     <div class="container-fluid">
-      <!-- <div class="dropdown">
-            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Sort by
-            </button>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="/gyms/query?sortby=new">Newest</a></li>
-              <li><a class="dropdown-item" href="/gyms/query?sortby=pricedesc">Highest Price</a></li>
-            </ul>
-          </div> -->
-
-      <form class="d-flex" id="queryForm" role="search" action="/gyms" method="get">
-        <select class="form-select" name="sortby" aria-label="Default select example">
-          <option value="">Sorted by</option>
-          <option value="new" <%=query.sortby==="new" ? "selected" : "" %>>Newest</option>
-          <option value="pricedesc" <%=query.sortby==="pricedesc" ? "selected" : "" %>>Highest Price</option>
-        </select>
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search"
-          id="search" value="<%= query.search %>">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
-    </div>
-  </div>
-
-  <div id="gyms"></div>
-
-
-      <nav aria-label="Page navigation example">
-        <ul class="pagination">
-        </ul>
-      </nav>
-      <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
-      <script>
-        const getGyms = async (URL) => {
-          await $.ajax({
-            type: "GET",
-            url: "/gyms/query?" + URL,
-            processData: false,
-            contentType: false,
-            dataType: "json",
-            encode: true,
-          }).done(function (res) {
-            total = res.total
-            let gyms = ""
-            for (let index = 0; index < res.data.length; index++) {
-              gyms += `<div class="card">
       <div class="row">
-        <div class="col-md-4">
-          <img src="${res.data[index].images[0]}" class="img-fluid rounded-start" alt="photo">
-        </div>
-        <div class="col-md-8">
-          <div class="card-body">
-            <h5 class="card-title">
-              ${res.data[index].name}
-            </h5>
-            <h6 class="card-subtitle mb-2 text-body-secondary">$${res.data[index].price}
-            </h6>
-            <p class="card-text">
-              ${res.data[index].description}
-            </p>
-            <a href="/gyms/${res.data[index]._id}">Learn more</a>
+        <div class="col-md-12 responsive-wrap">
+          <div class="row detail-filter-wrap">
+            <div class="col-md-4 featured-responsive">
+              <div class="detail-filter-text">
+                <p><span id="count"></span> Results <span></span></p>
+              </div>
+            </div>
+            <div class="col-md-4 ms-auto featured-responsive">
+              <form class="d-flex" id="queryForm" role="search" action="/gyms" method="get">
+                <select class="form-select" id="sort" name="sortby" aria-label="Default select example">
+                  <option value="">Sorted by</option>
+                  <option value="new" <%=query.sortby==="new" ? "selected" : "" %>>Newest</option>
+                  <option value="pricedesc" <%=query.sortby==="pricedesc" ? "selected" : "" %>>Highest Price</option>
+                </select>
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search"
+                  id="search" value="<%= query.search %>">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+              </form>
+            </div>
+          </div>
+          <div class="row detail-checkbox-wrap">
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Bike Parking</span>
+              </label>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Wireless Internet </span>
+              </label>
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Smoking Allowed </span>
+              </label>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Street Parking</span>
+              </label>
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Special</span>
+              </label>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Accepts Credit cards</span>
+              </label>
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
+
+              <label class="custom-control custom-checkbox">
+                <input type="checkbox" class="custom-control-input">
+                <span class="custom-control-indicator"></span>
+                <span class="custom-control-description">Pets Friendly</span>
+              </label>
+
+            </div>
+          </div>
+          <div class="row light-bg detail-options-wrap" id="gyms">
           </div>
         </div>
       </div>
-      </div>`
-            }
-            document.querySelector("#gyms").innerHTML = gyms;
-            currentPage = res.page;
-            $(window).scrollTop(0);
-          }).fail(function (res) {
-            console.log(res)
-          });
-        }
+    </div>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+      </ul>
+    </nav>
+  </section>
 
-        const initialize = async () => {
-          const formData = new FormData(document.querySelector("#queryForm"))
-          const URL = new URLSearchParams(formData).toString();
-          await getGyms(URL);
-          if (!total) {
-              document.querySelector("#gyms").innerHTML = `<div>
+
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.0/dist/jquery.min.js"></script>
+  <script>
+    const getGyms = async (URL) => {
+      await $.ajax({
+        type: "GET",
+        url: "/gyms/query?" + URL,
+        processData: false,
+        contentType: false,
+        dataType: "json",
+        encode: true,
+      }).done(function (res) {
+        total = res.total
+        let gyms = ""
+        for (let index = 0; index < res.data.length; index++) {
+          gyms += `<div class="col-sm-6 col-lg-12 col-xl-6 featured-responsive">
+              <div class="featured-place-wrap">
+                <a href="/gyms/${res.data[index]._id}">
+                  <img src="${res.data[index].images[0]}" class="img-fluid" alt="#">
+                  <span class="featured-rating-orange ">${res.data[index].average_rating}</span>
+                  <div class="featured-title-box">
+                    <h6>${res.data[index].name}</h6>
+                    <p>Climbing Gym </p> <span>• </span>
+                    <p>${res.data[index].reviews.length} Reviews</p> <span> • </span>
+                    <p><span>$${res.data[index].price}</span></p>
+                    <ul>
+                      <li><span class="icon-location-pin"></span>
+                        <p>${res.data[index].location_string}</p>
+                      </li>
+                      <li><span class="icon-screen-smartphone"></span>
+                        <p>+44 20 7336 8898</p>
+                      </li>
+                      <li><span class="icon-link"></span>
+                        <p>https://burgerandlobster.com</p>
+                      </li>
+
+                    </ul>
+                    <div class="bottom-icons">
+                      <div class="closed-now">CLOSED NOW</div>
+                      <span class="ti-heart"></span>
+                      <span class="ti-bookmark"></span>
+                    </div>
+                  </div>
+                </a>
+              </div>
+            </div>`
+
+        }
+        document.querySelector("#gyms").innerHTML = gyms;
+        document.querySelector("#count").innerHTML = total;
+        currentPage = res.page;
+        $(window).scrollTop(0);
+      }).fail(function (res) {
+        console.log(res)
+      });
+    }
+
+    const initialize = async () => {
+      const formData = new FormData(document.querySelector("#queryForm"))
+      const URL = new URLSearchParams(formData).toString();
+      await getGyms(URL);
+      if (!total) {
+        document.querySelector("#gyms").innerHTML = `<div>
       <h3>Sorry! We cant find anything at the moment</h3>
     </div>`
-              return;
-            }
-          let pageItems = ""
-          for (let index = 0; index < total / 10; index++) {
-            pageItems += `<li class="page-item"><a class="page-link" >${index + 1}</a></li>`
-          }
-          document.querySelector(".pagination").innerHTML = pageItems;
-          const buttons = document.querySelectorAll(".page-link")
-          buttons.forEach(button => {
-            button.addEventListener("click", async (event) => {
-              await getPage(parseInt(event.target.innerHTML));
-              event.preventDefault();
-            })
-          })
-          document.querySelectorAll(".page-item")[currentPage - 1].classList.add('active')
-        }
+        return;
+      }
+      let pageItems = ""
+      for (let index = 0; index < total / 10; index++) {
+        pageItems += `<li class="page-item"><a class="page-link" >${index + 1}</a></li>`
+      }
+      document.querySelector(".pagination").innerHTML = pageItems;
+      const buttons = document.querySelectorAll(".page-link")
+      buttons.forEach(button => {
+        button.addEventListener("click", async (event) => {
+          await getPage(parseInt(event.target.innerHTML));
+          event.preventDefault();
+        })
+      })
+      document.querySelectorAll(".page-item")[currentPage - 1].classList.add('active')
+    }
 
-        const getPage = async (page) => {
-          const formData = new FormData(document.querySelector("#queryForm"))
-          formData.append("page", page)
-          document.querySelectorAll(".page-item")[currentPage - 1].classList.remove('active')
-          await getGyms(new URLSearchParams(formData).toString())
-          document.querySelectorAll(".page-item")[currentPage - 1].classList.add('active')
-        }
+    const getPage = async (page) => {
+      const formData = new FormData(document.querySelector("#queryForm"))
+      formData.append("page", page)
+      document.querySelectorAll(".page-item")[currentPage - 1].classList.remove('active')
+      await getGyms(new URLSearchParams(formData).toString())
+      document.querySelectorAll(".page-item")[currentPage - 1].classList.add('active')
+    }
 
-        let currentPage = 1;
-        let total = 0;
-        $(document).ready(initialize());
+    let currentPage = 1;
+    let total = 0;
+    $(document).ready(initialize());
 
-      </script>
+  </script>

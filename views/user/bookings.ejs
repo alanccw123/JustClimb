@@ -1,35 +1,38 @@
 <% layout('template') %>
 
-<% if (bookings.length > 0) { %>
-    <table class="table">
-        <thead class="table-dark">
-            <tr>
-                <th scope="col">Gym</th>
-                <th scope="col">Date</th>
-                <th scope="col">Quantity</th>
-                <th scope="col">Total $</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% for( let booking of bookings ) { %>
+<section class="vh-100 mt-3 container">
+    <% if (bookings.length > 0) { %>
+        <table class="table">
+            <thead class="table-dark">
                 <tr>
-                    <td>
-                        <%= booking.gym.name %>
-                    </td>
-                    <td>
-                        <%= booking.date.toDateString() %>
-                    </td>
-                    <td>
-                        <%= booking.quantity %>
-                    </td>
-                    <td>
-                        <%= booking.totalPrice %>
-                    </td>
+                    <th scope="col">Gym</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Total $</th>
                 </tr>
-                <% } %>
-        </tbody>
-    </table>
-<% } else { %>
-    <h3>You have no bookings at the moment...</h3>
- <% } %>
+            </thead>
+            <tbody>
+                <% for( let booking of bookings ) { %>
+                    <tr>
+                        <td>
+                            <%= booking.gym.name %>
+                        </td>
+                        <td>
+                            <%= booking.date.toDateString() %>
+                        </td>
+                        <td>
+                            <%= booking.quantity %>
+                        </td>
+                        <td>
+                            <%= booking.totalPrice %>
+                        </td>
+                    </tr>
+                    <% } %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <h5>You have no bookings at the moment...</h5>
+     <% } %>
+</section>
+
     

@@ -35,7 +35,7 @@ const gymSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Review",
   }]
-}, {timestamps: true});
+}, {timestamps: true, toJSON: { virtuals: true }});
 
 gymSchema.virtual('average_rating').get(function() {
   let total = 0;
