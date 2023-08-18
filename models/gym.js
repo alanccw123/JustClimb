@@ -29,7 +29,7 @@ const gymSchema = new mongoose.Schema({
   owner: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-    require: [true, 'Owner id is required']
+    required: [true, 'Owner id is required']
   },
   reviews: [{
     type: mongoose.Schema.Types.ObjectId,

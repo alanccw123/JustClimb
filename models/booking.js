@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bookingSchema = new mongoose.Schema({
     totalPrice: { 
         type: Number,
-        require: [true, 'Username needed.']
+        require: [true, 'Price needed.']
     },
     quantity: {
         type: Number,

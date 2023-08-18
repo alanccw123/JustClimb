@@ -4,12 +4,12 @@ const reviewSchema = new mongoose.Schema({
     comment: String,
     rating: {
         type: Number,
-        require: [true, 'A rating is required']
+        required: [true, 'A rating is required']
     },
     author: { 
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        require: [true, 'Author id is required']
+        required: [true, 'Author id is required']
     }
 }, {timestamps: true});
 
