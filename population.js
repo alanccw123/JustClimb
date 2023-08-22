@@ -1,5 +1,10 @@
+if (process.env.NODE_ENV !== 'production') {
+    require('dotenv').config(); 
+}
+const db_url = process.env.db_url || 'mongodb://127.0.0.1:27017/JustClimb';
+
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://127.0.0.1:27017/JustClimb');
+mongoose.connect(db_url);
 const Gym = require('./models/gym');
 const User = require('./models/user');
 const Review = require('./models/review');
@@ -26,7 +31,9 @@ const populate = async () => {
                     gyms[random].latitude
                 ]
             },
-            location_string: gyms[random].city,
+            website: gyms[random].url || 'N/A',
+            contact: gyms[random].phone || 'N/A',
+            location_string: gyms[random].city || 'Glasgow',
             description: gyms[random].description,
             images: ['https://source.unsplash.com/random/900x700/?gym&1',
             'https://source.unsplash.com/random/900x700/?gym&2'],

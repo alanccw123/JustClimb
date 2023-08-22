@@ -76,10 +76,8 @@ router.get('/query', async (req, res) => {
   } else if (req.query.sortby === 'pricedesc') {
     sortby = { price: -1 }
   }
-  // const gyms = await Gym.find({ $text: { $search: req.query.search } },
-  //   { score: { $meta: "textScore" } })
-  //   .sort({ score: { $meta: "textScore" } })
-  const gyms = await Gym.find(search).sort(sortby).limit(10).skip((page - 1) * 10).populate('reviews');
+
+  const gyms = await Gym.find(search).sort(sortby).limit(12).skip((page - 1) * 12).populate('reviews');
   const total = await Gym.countDocuments(search);
 
   const response = {

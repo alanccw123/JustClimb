@@ -1,11 +1,18 @@
 <% layout('template') %>
 
-<div class="alert alert-danger" role="alert">
-    <h4 class="alert-heading">Something went wrong!</h4>
-    <%= err.message %>
-    <% if (process.env.NODE_ENV !== 'production') { %>
-        <div><%= err.stack %></div>
-    <% } %>
-    
+<div class="row mt-5 mb-5">
+    <div class="col-6 offset-3">
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Something went wrong!</h4>
+            <div><%= err.message %></div>       
+            <% if (process.env.NODE_ENV !== 'production') { %>
+                <div><%= err.stack %></div>
+            <% } %>
+            <div><a href="/">Back to Home Page</a></div>
+            
+        </div>
+        
+    </div>
 </div>
+
 

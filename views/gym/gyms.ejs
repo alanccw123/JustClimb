@@ -1,6 +1,6 @@
 <% layout('template') %>
-  <section class="vh-100">
-    <div class="container-fluid">
+  <section >
+    <div class="container-fluid ">
       <div class="row">
         <div class="col-md-12 responsive-wrap">
           <div class="row detail-filter-wrap">
@@ -22,7 +22,7 @@
               </form>
             </div>
           </div>
-          <div class="row detail-checkbox-wrap">
+          <!-- <div class="row detail-checkbox-wrap">
             <div class="col-sm-12 col-md-6 col-lg-4 col-xl-3">
 
               <label class="custom-control custom-checkbox">
@@ -80,7 +80,7 @@
               </label>
 
             </div>
-          </div>
+          </div> -->
           <div class="row light-bg detail-options-wrap" id="gyms">
           </div>
         </div>
@@ -107,7 +107,7 @@
         total = res.total
         let gyms = ""
         for (let index = 0; index < res.data.length; index++) {
-          gyms += `<div class="col-sm-6 col-lg-12 col-xl-6 featured-responsive">
+          gyms += `<div class="col-sm-12 col-lg-4  featured-responsive">
               <div class="featured-place-wrap">
                 <a href="/gyms/${res.data[index]._id}">
                   <img src="${res.data[index].images[0]}" class="img-fluid" alt="#">
@@ -122,15 +122,12 @@
                         <p>${res.data[index].location_string}</p>
                       </li>
                       <li><span class="icon-screen-smartphone"></span>
-                        <p>+44 20 7336 8898</p>
+                        <p>${res.data[index].contact}</p>
                       </li>
-                      <li><span class="icon-link"></span>
-                        <p>https://burgerandlobster.com</p>
-                      </li>
+
 
                     </ul>
                     <div class="bottom-icons">
-                      <div class="closed-now">CLOSED NOW</div>
                       <span class="ti-heart"></span>
                       <span class="ti-bookmark"></span>
                     </div>
@@ -160,7 +157,7 @@
         return;
       }
       let pageItems = ""
-      for (let index = 0; index < total / 10; index++) {
+      for (let index = 0; index < total / 12; index++) {
         pageItems += `<li class="page-item"><a class="page-link" >${index + 1}</a></li>`
       }
       document.querySelector(".pagination").innerHTML = pageItems;

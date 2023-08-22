@@ -1,31 +1,44 @@
 <% layout('template') %>
 
-<div class="row mt-5 mb-5">
-    <div class="col-6 offset-3">
-        <form action="/gyms/new" method="POST" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" name="gym[name]" id="name" required>
-            </div>
-            <div class="mb-3">
-              <label for="location" class="form-label">Location</label>
-              <input type="text" class="form-control" name="location" id="location" aria-describedby="emailHelp" required>
-            </div>
-            <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input type="text" class="form-control" name="price" id="price" aria-describedby="emailHelp" required>
-              </div>
-            <div class="mb-3">
-                <label class="form-label" for="description">Description</label>
-                <textarea name="gym[description]" class='form-control' id="description" cols="30" rows="10" required>Please say something about your gym!
+    <div class="row mt-5 mb-5">
+        <div class="col-6 offset-3">
+            <form action="/gyms/new" method="POST" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="gym[name]" id="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="location" class="form-label">Location</label>
+                    <input type="text" class="form-control" name="location" id="location" aria-describedby="emailHelp"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Price</label>
+                    <input type="text" class="form-control" name="gym[price]" id="price" aria-describedby="emailHelp"
+                        required>
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Contact no.</label>
+                    <input type="text" class="form-control" name="gym[contact]" id="contact"
+                        aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label for="price" class="form-label">Website</label>
+                    <input type="text" class="form-control" name="gym[website]" id="website"
+                        aria-describedby="emailHelp">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="description">Description</label>
+                    <textarea name="gym[description]" class='form-control' id="description" cols="30" rows="10"
+                        required>Please say something about your gym!
                 </textarea>
-            </div>
-      
-            <div class="mb-3">
-                <label for="formFileMultiple" class="form-label">Upload images</label>
-                <input class="form-control" type="file" id="formFileMultiple"  name="images" multiple>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
+                </div>
+
+                <div class="mb-3">
+                    <label for="formFileMultiple" class="form-label">Upload images</label>
+                    <input class="form-control" type="file" id="formFileMultiple" name="images" multiple>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
-</div>

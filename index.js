@@ -27,6 +27,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const geoip = require('geoip-lite');
 const Booking = require('./models/booking');
+const db_url = process.env.db_url || 'mongodb://127.0.0.1:27017/JustClimb';
 
 // passport authentication middleware config
 passport.use(new LocalStrategy(User.authenticate()));
@@ -48,7 +49,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // connect to db
-mongoose.connect('mongodb://127.0.0.1:27017/JustClimb').then(
+mongoose.connect(db_url).then(
     () => { console.log('connection open') },
     err => { console.log('connection failed') }
   );
@@ -110,7 +111,7 @@ app.get('/', async(req, res) => {
                 }
             }
         }
-    }).limit(10).populate('reviews')
+    }).limit(9).populate('reviews')
     res.render('index', { gyms });
 })
 
@@ -125,7 +126,7 @@ app.use((err, req, res, next) => {
     let { statusCode = 500 } = err;
     if (err instanceof mongoose.Error) {
         statusCode = 400;
-        if (!err instanceof mongoose.Error.ValidationError) {
+        if (err instanceof mongoose.Error.ValidationError) {
             err.message = 'Invalid data'
         }
     }
@@ -133,6 +134,7 @@ app.use((err, req, res, next) => {
     res.status(statusCode).render('error', {err})
 })   
 
-app.listen(3000, () => {
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
     console.log('Server is now running');
 })

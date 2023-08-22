@@ -24,7 +24,7 @@
   <title>Just Climb</title>
 </head>
 
-<body class="d-flex flex-column  light-bg vh-100">
+<body class="d-flex flex-column  light-bg min-vh-100">
   <div class="dark-bg sticky-top">
     <div class="container-fluid">
       <div class="row">
@@ -78,76 +78,78 @@
     </div>
   </div>
 
-    <% if (success.length) { %>
-      <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">Success</h1>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <%= success %>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            </div>
+  <% if (success.length) { %>
+    <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Success</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-        </div>
-      </div>
-      <% } %>
-        <% if (error.length) { %>
-          <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <%= error %>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
-              </div>
-            </div>
+          <div class="modal-body">
+            <%= success %>
           </div>
-          <% } %>
-
-            <%- body %>
-
-
-  <footer class="main-block dark-bg">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="copyright">
-            <p>Copyright &copy; 2023 Listing. All rights reserved | This template is partly made with <i
-                class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
-            </p>
-            <ul>
-              <li><a href="#"><span class="ti-facebook"></span></a></li>
-              <li><a href="#"><span class="ti-twitter-alt"></span></a></li>
-              <li><a href="#"><span class="ti-instagram"></span></a></li>
-            </ul>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           </div>
         </div>
       </div>
     </div>
-  </footer>
+    <% } %>
+      <% if (error.length) { %>
+        <div class="modal fade" id="myModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Error</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <%= error %>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% } %>
+
+        <%- body %>
+         
 
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
-    crossorigin="anonymous"></script>
-  <script>
-    const myModal = document.getElementById('myModal')
-    if (myModal) {
-      new bootstrap.Modal(myModal).show();
-    }
+            <footer class="main-block dark-bg mt-auto">
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="copyright">
+                      <p>Copyright &copy; 2023 Listing. All rights reserved | This template is partly made with <i
+                          class="ti-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
+                          target="_blank">Colorlib</a>
+                      </p>
+                      <ul>
+                        <li><a href="#"><span class="ti-facebook"></span></a></li>
+                        <li><a href="#"><span class="ti-twitter-alt"></span></a></li>
+                        <li><a href="#"><span class="ti-instagram"></span></a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </footer>
 
-  </script>
+
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+              integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+              crossorigin="anonymous"></script>
+            <script>
+              const myModal = document.getElementById('myModal')
+              if (myModal) {
+                new bootstrap.Modal(myModal).show();
+              }
+
+            </script>
 </body>
 
 </html>

@@ -25,7 +25,7 @@
                                     </div>
                                 </form>
                                 <div class="slider-link">
-                                    <a href="#">Browse Popular</a><span>or</span> <a href="#">Recently Added</a>
+                                     <a href="/gyms?sortby=new">Recently Added</a>
                                 </div>
                             </div>
                         </div>
@@ -63,15 +63,11 @@
                                             <p><%= gym.location_string %></p>
                                         </li>
                                         <li><span class="icon-screen-smartphone"></span>
-                                            <p>+44 20 7336 8898</p>
-                                        </li>
-                                        <li><span class="icon-link"></span>
-                                            <p>https://burgerandlobster.com</p>
+                                            <p><%= gym.contact %></p>
                                         </li>
     
                                     </ul>
                                     <div class="bottom-icons">
-                                        <div class="closed-now">CLOSED NOW</div>
                                         <span class="ti-heart"></span>
                                         <span class="ti-bookmark"></span>
                                     </div>

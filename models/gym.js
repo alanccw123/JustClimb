@@ -3,12 +3,20 @@ const mongoose = require('mongoose');
 const gymSchema = new mongoose.Schema({
   name: {
     type: String,
-    require: [true, 'Gym name is required']
+    required: [true, 'Gym name is required']
   },
   description: String,
   price: {
     type: Number,
-    require: [true, 'Price for day-pass is required']
+    required: [true, 'Price for day-pass is required']
+  },
+  contact: {
+    type: String,
+    default: "N/A"
+  },
+  website: {
+    type: String,
+    default: "N/A"
   },
   location_string: {
     type: String,

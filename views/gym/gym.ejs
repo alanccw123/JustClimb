@@ -35,7 +35,6 @@
             <%= gym.name %>
           </h5>
           <p><span>$<%= gym.price %></span></p>
-          <p class="reserve-description">Innovative cooking, paired with fine wines in a modern setting.</p>
           <% if (isLoggedin && (loggedinUser._id.equals(gym.owner._id) || loggedinUser.isAdmin)) { %>
             <div class="review-btn">
               <a class="btn btn-info" href="/gyms/<%= gym._id %>/edit">Edit</a>
@@ -49,14 +48,14 @@
         </div>
         <div class="col-md-6">
           <div class="reserve-seat-block">
-            
-            
-              <div class="review-btn">
-                <a href="#review-form" class="btn btn-primary">WRITE A REVIEW</a>
-                <span>
-                  <%= gym.reviews.length %> reviews
-                </span>
-              </div>
+
+
+            <div class="review-btn">
+              <a href="#review-form" class="btn btn-primary">WRITE A REVIEW</a>
+              <span>
+                <%= gym.reviews.length %> reviews
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -143,25 +142,27 @@
         <div class="col-md-4 responsive-wrap">
           <div class="contact-info">
             <img
-              src="https://maps.googleapis.com/maps/api/staticmap?size=400x400&zoom=14&markers=color:blue|<%= gym.location.coordinates[1] %>,<%= gym.location.coordinates[0] %>&key=<%= process.env.googlemap_api_key%>"
+              src="https://maps.googleapis.com/maps/api/staticmap?size=400x400&zoom=14&markers=color:red|<%= gym.location.coordinates[1] %>,<%= gym.location.coordinates[0] %>&key=<%= process.env.googlemap_api_key%>"
               alt="">
             <div class="address">
               <span class="icon-location-pin"></span>
-              <p> Doyers St<br> New York, NY 10013<br> b/t Division St & St James Pl <br> Chinatown, Civic Center</p>
+              <p>
+                <%= gym.location_string %>
+              </p>
             </div>
             <div class="address">
               <span class="icon-screen-smartphone"></span>
-              <p> +44 20 7336 8898</p>
+              <p>
+                <%= gym.contact %>
+              </p>
             </div>
             <div class="address">
-              <span class="icon-link"></span>
-              <p>https://burgerandlobster.com</p>
+              <span class="icon-link" ></span>
+              <p><%= gym.website %></p>
             </div>
             <div class="address">
               <span class="icon-clock"></span>
-              <p>Mon - Sun 09:30 am - 05:30 pm <br>
-                <span class="open-now">OPEN NOW</span>
-              </p>
+              <p>Mon - Sun 09:30 am - 05:30 pm</p>
             </div>
           </div>
           <div class="contact-info">

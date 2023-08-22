@@ -33,7 +33,6 @@ router.post('/login', passport.authenticate('local', { failureRedirect: '/login'
     const redirectTo = req.session.redirectTo || '';
     delete req.session.redirectTo;
     req.flash('success', 'Welcome back!');
-    console.log(redirectTo);
     res.redirect('/gyms/' + redirectTo);
 })
 
