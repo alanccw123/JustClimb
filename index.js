@@ -101,7 +101,7 @@ app.use('/gyms/:id/reviews', reviews);
 // home page route
 app.get('/', async(req, res) => {
     
-    const geo = geoip.lookup('5.151.139.58');
+    const geo = geoip.lookup(req.ip);
     const gyms = await Gym.find({
         location: {
             $near: {
@@ -136,5 +136,5 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
-    console.log('Server is now running');
+    console.log(`Server is now running on port ${PORT}`);
 })

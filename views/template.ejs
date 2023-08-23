@@ -31,16 +31,22 @@
         <div class="col-md-12">
           <nav class="navbar navbar-expand-lg navbar-light">
             <a class="navbar-brand" href="/">Just Climb</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
               aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
               <span class="icon-menu"></span>
             </button>
-            <% if (isLoggedin && loggedinUser.isOwner) { %>
-              <li><a href="/gyms/new" class="btn btn-outline-light top-btn"><span class="ti-plus"></span> Add Gym</a>
-              </li>
-              <% } %>
-                <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-                  <ul class="navbar-nav">
+
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+
+              <% if (isLoggedin && loggedinUser.isOwner) { %>
+                <a href="/gyms/new" class="btn btn-outline-light top-btn"><span class="ti-plus"></span> Add
+                    Gym</a>
+              
+                <% } %>
+
+              <ul class="navbar-nav">
+
+                
 
                     <li class="nav-item">
                       <a class="nav-link" href="/gyms">Explore</a>
@@ -70,8 +76,8 @@
                         <% } %>
 
 
-                  </ul>
-                </div>
+              </ul>
+            </div>
           </nav>
         </div>
       </div>
@@ -115,8 +121,8 @@
         </div>
         <% } %>
 
-        <%- body %>
-         
+          <%- body %>
+
 
 
             <footer class="main-block dark-bg mt-auto">
