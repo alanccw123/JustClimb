@@ -43,13 +43,14 @@ const gymSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Review",
   }]
-}, {timestamps: true, toJSON: { virtuals: true }});
+},
+  { timestamps: true, toJSON: { virtuals: true } });
 
-gymSchema.virtual('average_rating').get(function() {
+gymSchema.virtual('average_rating').get(function () {
   let total = 0;
   this.reviews.forEach((review) => total += review.rating);
   return this.reviews.length ? total / this.reviews.length : 0;
- });
+});
 
 gymSchema.index({ location: "2dsphere" });
 gymSchema.index({ name: "text", description: "text" });
