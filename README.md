@@ -1,3 +1,4 @@
 # Development Project
 
-Deployed at https://just-climb-393518.uc.r.appspot.com
+ JustClimb is a web application for climbers to search for climbing gyms, register for events, book sessions, and submit reviews. 
+ Developed using NodeJS, ExpressJS, and MongoDB
